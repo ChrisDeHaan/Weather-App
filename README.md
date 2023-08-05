@@ -16,6 +16,7 @@ I want to create a simple weather app that will give me a 5 day forecast for mul
 
 - <a href="https://developer.mozilla.org/en-US/">MDN web docs</a>
 - <a href ="https://www.w3schools.com/">w3 schools</a>
+- <a href ="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse">reversing array</a>
 
 ## License
 
