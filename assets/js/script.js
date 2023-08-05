@@ -23,7 +23,7 @@ cityNameInput.addEventListener( "keydown", (event) => {
 //function for getting the lat, lon values for a city name and storing those values
 function getLocation(cityNameInput) { 
     var apiKey = 'f1b45b757f5516eb0176dce94ee00898'
-    var geoCodingCall = `http://api.openweathermap.org/geo/1.0/direct?q=${cityNameInput}&limit=1&appid=${apiKey}`
+    var geoCodingCall = `https://api.openweathermap.org/geo/1.0/direct?q=${cityNameInput}&limit=1&appid=${apiKey}`
 
     fetch(geoCodingCall)
     .then( (response) => {return response.json()})
@@ -47,7 +47,7 @@ function getLocation(cityNameInput) {
 //function for getting the weather data of a city using lat and lon
 function getData(lat, lon) {
     var apiKey = 'f1b45b757f5516eb0176dce94ee00898'
-    var weatherCall = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
+    var weatherCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
 
     fetch(weatherCall)
     .then( (response) => {return response.json()})
