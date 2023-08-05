@@ -1,12 +1,27 @@
 var cityNameInput = document.getElementById("inputCityName")
 var cityButtonContainer = document.getElementById("cityButtons")
-var localStorageContent = localStorage.getItem('cities')
-cityNameInput = 'fdgsgfd'
+var searchButton = document.getElementById('searchButton')
 
-getLocation()
+//localStorage variables
+var localStorageContent = localStorage.getItem('cities')
+var cityObjArray = JSON.parse(localStorageContent) || []
+
+//I want to generate any buttons in localStorage on page load
+buttonGenerator();
+
+//eventListener for getting the input field value and calling my functions
+cityNameInput.addEventListener( "keydown", (event) => {
+    // event.preventDefault();
+    if (event.code === "Enter") {
+        event.preventDefault();
+        cityNameInput = event.target.value;
+        getLocation(cityNameInput);
+        document.getElementById('inputCityName').value = ''
+    }
+})
 
 //function for getting the lat, lon values for a city name and storing those values
-function getLocation() { 
+function getLocation(cityNameInput) { 
     var apiKey = 'f1b45b757f5516eb0176dce94ee00898'
     var geoCodingCall = `http://api.openweathermap.org/geo/1.0/direct?q=${cityNameInput}&limit=1&appid=${apiKey}`
 
@@ -40,8 +55,6 @@ function getData(lat, lon) {
 }
 
 //function for the localStorage of city names and lat/lon as well as generating the buttons
-var cityObjArray = JSON.parse(localStorageContent) || []
-
 function cityStorage (lat, lon, cityName) {
     var addCityObject = {
         name: cityName,
@@ -63,6 +76,7 @@ function cityStorage (lat, lon, cityName) {
 //function for generating the buttons
 function buttonGenerator () {
     cityObjArray.reverse() //I want the buttons to appear with the most recent addition on top
+    cityButtonContainer.innerHTML = '' //need to clear the buttons on page load
     for (var i = 0; i < cityObjArray.length; i++) {
         cityButtonContainer.innerHTML += `
         <button type="button" class="btn btn-secondary form-control py-2 my-2">${cityObjArray[i].name}</button>
