@@ -10,7 +10,7 @@ var cityObjArray = JSON.parse(localStorageContent) || []
 //I want to generate any buttons in localStorage on page load
 buttonGenerator();
 
-//eventListener for getting the input field value and calling my functions
+//event listener for getting the input field value and calling my functions
 cityNameInput.addEventListener( "keydown", (event) => {
     // event.preventDefault();
     if (event.code === "Enter") {
@@ -19,6 +19,15 @@ cityNameInput.addEventListener( "keydown", (event) => {
         getLocation(cityNameInput);
         document.getElementById('inputCityName').value = ''
     }
+})
+
+//event listener for previous city buttons to display their weather data
+cityButtonContainer.addEventListener( "click", (event) => {
+    if (event.target.value !== undefined) {
+        var buttonClicked = event.target.textContent
+        getLocation(buttonClicked)
+    }
+
 })
 
 //function for getting the lat, lon values for a city name and storing those values
@@ -38,8 +47,7 @@ function getLocation(cityNameInput) {
         var lon = data[0].lon
         var cityName = data[0].name
 
-        console.log(lat, lon, cityName)
-        cityStorage(lat, lon, cityName)
+        cityStorage(cityName)
         getData(lat, lon)
         }
     })
@@ -53,8 +61,9 @@ function getData(lat, lon) {
     fetch(weatherCall)
     .then( (response) => {return response.json()})
     .then( (data) => {
-        console.log (data)
+        fiveDayForecastContainer.innerHTML = ''
 
+        //for loop to iterate through the array and create an element for each day. the data is in 3 hour increments over 5 days, so 40 objects total. I'll take the weather at noon for each day.
         for (i = 4; i < 40; i += 8) {
         var date = data.list[i].dt_txt;
             date = date.slice(0,10) //we'll lop off the time of day since it isn't needed for a daily forecast
@@ -63,28 +72,22 @@ function getData(lat, lon) {
         var wind = data.list[i].wind.speed;
         var humidity = data.list[i].main.humidity;
 
-        console.log (date, icon, temp, wind, humidity)
-
         fiveDayForecastContainer.innerHTML += `
-        <div class="col-lg-2 col-12 bg-light border border-3 border-dark rounded p-2 my-3">
-        <p class="h4">${date}</p>
+        <div class="col-lg-2 col-12 bg-light border border-3 border-secondary rounded p-2 my-3">
+        <p class="h4 text-center">${date}</p>
         <img src='http://openweathermap.org/img/w/${icon}.png' class="mx-auto d-block"></img>
         <p>Temp: ${temp}</p>
         <p>Wind: ${wind} MPH</p>
         <p>Humidity: ${humidity}%</p>
-    </div>
-        `
-
-    }
+        </div>
+        `}
     })
 }
 
 //function for the localStorage of city names and lat/lon as well as generating the buttons
-function cityStorage (lat, lon, cityName) {
+function cityStorage (cityName) {
     var addCityObject = {
-        name: cityName,
-        lat: lat,
-        lon: lon
+        name: cityName
     }
 
     cityObjArray.push(addCityObject)
