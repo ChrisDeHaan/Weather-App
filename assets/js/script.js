@@ -85,9 +85,9 @@ function displayData(lat, lon) {
 
             //for loop to iterate through the array and create an element for each day. the data is in 3 hour increments over 5 days, so 40 objects total. I'll take the weather at noon for each day.
             for (i = 4; i < 40; i += 8) {
-                var date = data.list[i].dt_txt;
-                date = date.slice(0, 10) //we'll lop off the time of day since it isn't needed for a daily forecast
-                date = `${date.slice(5)}-${date.slice(0, 4)}` //I want the format to be MM-DD-YYYY
+                var date = data.list[i].dt;
+                date = dateGenerator(date); //get a formatted date
+                date = date.slice(0,6) //remove the year from the date
                 var icon = data.list[i].weather[0].icon;
                 var temp = data.list[i].main.feels_like;
                 var wind = data.list[i].wind.speed;
@@ -95,7 +95,7 @@ function displayData(lat, lon) {
 
                 fiveDayForecastContainer.innerHTML += `
         <div class="col-lg-2 col-12 bg-light border border-3 border-secondary shadow rounded p-2 my-3">
-        <p class="h4 text-center">${date}</p>
+        <p class="h3 text-center">${date}</p>
         <img src='http://openweathermap.org/img/w/${icon}.png' class="mx-auto d-block" alt='image of weather'></img>
         <p>Temp: ${temp}</p>
         <p>Wind: ${wind} MPH</p>
