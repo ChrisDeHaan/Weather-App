@@ -72,9 +72,9 @@ function displayData(lat, lon) {
         .then((data) => {
             cwCity.innerHTML = `<strong>${data.name}</strong><img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`
             cwDate.innerHTML = `<strong>${dateGenerator(data.dt)}</strong>`
-            cwTemp.textContent = `Temperature: ${data.main.temp}`
-            cwWind.textContent = `Wind: ${data.wind.speed}`
-            cwHumidity.textContent = `${data.main.humidity}%`
+            cwTemp.textContent = `Temperature: ${data.main.temp}° F`
+            cwWind.textContent = `Wind: ${data.wind.speed} MPH`
+            cwHumidity.textContent = `Humidity: ${data.main.humidity}%`
         })
 
     //fetch request for the 5 day forecast
@@ -89,7 +89,7 @@ function displayData(lat, lon) {
                 date = dateGenerator(date); //get a formatted date
                 date = date.slice(0,6) //remove the year from the date
                 var icon = data.list[i].weather[0].icon;
-                var temp = data.list[i].main.feels_like;
+                var temp = `${data.list[i].main.feels_like}° F`;
                 var wind = data.list[i].wind.speed;
                 var humidity = data.list[i].main.humidity;
 
