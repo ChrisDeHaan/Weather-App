@@ -20,6 +20,7 @@ https://chrisdehaan.github.io/Weather-App/
 - <a href ="https://stackoverflow.com/questions/59935038/openweathermap-api-forecast-for-only-days">link to better api call</a>
 - <a href ="https://stackoverflow.com/questions/12809776/can-a-for-loop-increment-decrement-by-more-than-one">incrementing more than +1</a>
 - <a href ="https://stackoverflow.com/questions/43226511/how-can-i-center-an-image-in-bootstrap">centering image in bootstrap</a>
+- <a href ="https://openweathermap.org/weather-conditions">icons for OpenWeather</a>
 
 ## License
 
