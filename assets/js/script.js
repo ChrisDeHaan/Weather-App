@@ -2,6 +2,7 @@ var cityNameInput = document.getElementById("inputCityName")
 var cityButtonContainer = document.getElementById("cityButtons")
 var searchButton = document.getElementById('searchButton')
 var fiveDayForecastContainer = document.getElementById('5dayForecastContainer')
+var submitButton = document.getElementById('submitButton')
 
 //current weather specific variables
 var cwCity = document.getElementById('cwName')
@@ -17,14 +18,25 @@ var cityObjArray = JSON.parse(localStorageContent) || []
 //I want to generate any buttons in localStorage on page load
 buttonGenerator();
 
-//event listener for getting the input field value and calling my functions
+//event listener for pc users who press enter, getting the input field value and calling my functions
 cityNameInput.addEventListener("keydown", (event) => {
-    // event.preventDefault();
     if (event.code === "Enter") {
         event.preventDefault();
         cityNameInput = event.target.value;
         getLocation(cityNameInput);
         document.getElementById('inputCityName').value = ''
+    }
+})
+
+//event listener for users who press the submit button
+submitButton.addEventListener("click", (event) => {
+    if (document.getElementById("inputCityName").value === '') {
+        return;
+    } else {
+        event.preventDefault();
+        cityNameInput = document.getElementById("inputCityName").value
+        console.log (cityNameInput)
+        getLocation(cityNameInput)
     }
 })
 
@@ -34,7 +46,6 @@ cityButtonContainer.addEventListener("click", (event) => {
         var buttonClicked = event.target.textContent
         getLocation(buttonClicked)
     }
-
 })
 
 //function for getting the lat, lon values for a city name and storing those values
@@ -72,7 +83,7 @@ function displayData(lat, lon) {
         .then((data) => {
             cwCity.innerHTML = `<strong>${data.name}</strong><img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`
             cwDate.innerHTML = `<strong>${dateGenerator(data.dt)}</strong>`
-            cwTemp.textContent = `Temperature: ${data.main.temp}° F`
+            cwTemp.textContent = `Temperature: ${Math.round(data.main.temp)}° F` //round to nearest whole integer
             cwWind.textContent = `Wind: ${data.wind.speed} MPH`
             cwHumidity.textContent = `Humidity: ${data.main.humidity}%`
         })
@@ -87,16 +98,16 @@ function displayData(lat, lon) {
             for (i = 4; i < 40; i += 8) {
                 var date = data.list[i].dt;
                 date = dateGenerator(date); //get a formatted date
-                date = date.slice(0,6) //remove the year from the date
+                date = date.slice(0, 6) //remove the year from the date
                 var icon = data.list[i].weather[0].icon;
-                var temp = `${data.list[i].main.feels_like}° F`;
+                var temp = `${Math.round(data.list[i].main.feels_like)}° F`;
                 var wind = data.list[i].wind.speed;
                 var humidity = data.list[i].main.humidity;
 
                 fiveDayForecastContainer.innerHTML += `
         <div class="col-lg-2 col-12 bg-light border border-3 border-secondary shadow rounded p-2 my-3">
         <p class="h3 text-center">${date}</p>
-        <img src='http://openweathermap.org/img/w/${icon}.png' class="mx-auto d-block" alt='image of weather'></img>
+        <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class="mx-auto d-block" alt='image of weather'></img>
         <p>Temp: ${temp}</p>
         <p>Wind: ${wind} MPH</p>
         <p>Humidity: ${humidity}%</p>
@@ -137,7 +148,7 @@ function buttonGenerator() {
 //function to turn milliseconds into a readable date. 
 //Part of this code was taken from https://www.geeksforgeeks.org/how-to-convert-milliseconds-to-date-in-javascript/
 function dateGenerator(time) {
-    var date = new Date(time*1000); //code taken from Geeks for Geeks
+    var date = new Date(time * 1000); //code taken from Geeks for Geeks
     date = date.toString()
     date = date.slice(4, 15)
     return date
