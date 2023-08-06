@@ -1,6 +1,7 @@
 var cityNameInput = document.getElementById("inputCityName")
 var cityButtonContainer = document.getElementById("cityButtons")
 var searchButton = document.getElementById('searchButton')
+var fiveDayForecastContainer = document.getElementById('5dayForecastContainer')
 
 //localStorage variables
 var localStorageContent = localStorage.getItem('cities')
@@ -51,7 +52,31 @@ function getData(lat, lon) {
 
     fetch(weatherCall)
     .then( (response) => {return response.json()})
-    .then( (data) => {console.log (data)})
+    .then( (data) => {
+        console.log (data)
+
+        for (i = 4; i < 40; i += 8) {
+        var date = data.list[i].dt_txt;
+            date = date.slice(0,10) //we'll lop off the time of day since it isn't needed for a daily forecast
+        var icon = data.list[i].weather[0].icon;
+        var temp = data.list[i].main.feels_like;
+        var wind = data.list[i].wind.speed;
+        var humidity = data.list[i].main.humidity;
+
+        console.log (date, icon, temp, wind, humidity)
+
+        fiveDayForecastContainer.innerHTML += `
+        <div class="col-lg-2 col-12 bg-light border border-3 border-dark rounded p-2 my-3">
+        <p class="h4">${date}</p>
+        <img src='http://openweathermap.org/img/w/${icon}.png' class="mx-auto d-block"></img>
+        <p>Temp: ${temp}</p>
+        <p>Wind: ${wind} MPH</p>
+        <p>Humidity: ${humidity}%</p>
+    </div>
+        `
+
+    }
+    })
 }
 
 //function for the localStorage of city names and lat/lon as well as generating the buttons
