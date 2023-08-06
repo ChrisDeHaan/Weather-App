@@ -6,7 +6,6 @@ var fiveDayForecastContainer = document.getElementById('5dayForecastContainer')
 //current weather specific variables
 var cwCity = document.getElementById('cwName')
 var cwDate = document.getElementById('cwDate')
-var cwImage = document.getElementById('cwImage')
 var cwTemp = document.getElementById('cwTemp')
 var cwWind = document.getElementById('cwWind')
 var cwHumidity = document.getElementById('cwHumidity')
@@ -56,13 +55,13 @@ function getLocation(cityNameInput) {
                 var cityName = data[0].name
 
                 cityStorage(cityName)
-                getData(lat, lon)
+                displayData(lat, lon)
             }
         })
 }
 
 //function for getting the weather data of a city using lat and lon
-function getData(lat, lon) {
+function displayData(lat, lon) {
     var apiKey = 'f1b45b757f5516eb0176dce94ee00898'
     var futureWeatherCall = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
     var currentWeatherCall = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`
@@ -72,6 +71,7 @@ function getData(lat, lon) {
         .then((response) => { return response.json() })
         .then((data) => {
             cwCity.innerHTML = `<strong>${data.name}</strong><img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`
+            cwDate.innerHTML = `<strong>${dateGenerator(data.dt)}</strong>`
             cwTemp.textContent = `Temperature: ${data.main.temp}`
             cwWind.textContent = `Wind: ${data.wind.speed}`
             cwHumidity.textContent = `${data.main.humidity}%`
@@ -87,6 +87,7 @@ function getData(lat, lon) {
             for (i = 4; i < 40; i += 8) {
                 var date = data.list[i].dt_txt;
                 date = date.slice(0, 10) //we'll lop off the time of day since it isn't needed for a daily forecast
+                date = `${date.slice(5)}-${date.slice(0, 4)}` //I want the format to be MM-DD-YYYY
                 var icon = data.list[i].weather[0].icon;
                 var temp = data.list[i].main.feels_like;
                 var wind = data.list[i].wind.speed;
@@ -131,4 +132,13 @@ function buttonGenerator() {
         `
     }
     cityObjArray.reverse() //flip it back
+}
+
+//function to turn milliseconds into a readable date. 
+//Part of this code was taken from https://www.geeksforgeeks.org/how-to-convert-milliseconds-to-date-in-javascript/
+function dateGenerator(time) {
+    var date = new Date(time*1000); //code taken from Geeks for Geeks
+    date = date.toString()
+    date = date.slice(4, 15)
+    return date
 }
