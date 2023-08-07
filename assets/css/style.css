@@ -1,0 +1,7 @@
+#weatherCards{
+    background-image: linear-gradient(rgb(130, 201, 255), white);
+}
+
+#weatherCards2{
+    background-image: linear-gradient( rgb(90, 183, 255), rgb(181, 222, 253))
+}
