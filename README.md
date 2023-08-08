@@ -10,7 +10,7 @@ https://chrisdehaan.github.io/Weather-App/
 
 ## Mock-up
 
-
+![website-mock-up](./assets/img/weather-app-mock.png)
 
 ## References
 

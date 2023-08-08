@@ -20,7 +20,7 @@ buttonGenerator();
 
 //event listener for pc users who press enter, getting the input field value and calling my functions
 cityNameInput.addEventListener("keydown", (event) => {
-    if (event.code === "Enter") {
+    if (event.keyCode === 13) {
         event.preventDefault();
         cityNameInput = event.target.value;
         getLocation(cityNameInput);
@@ -30,14 +30,11 @@ cityNameInput.addEventListener("keydown", (event) => {
 
 //event listener for users who press the submit button
 submitButton.addEventListener("click", (event) => {
-    if (document.getElementById("inputCityName").value === '') {
-        return;
-    } else {
+    if (document.getElementById("inputCityName").value === '') return;
         event.preventDefault();
         cityNameInput = document.getElementById("inputCityName").value
         console.log (cityNameInput)
         getLocation(cityNameInput)
-    }
 })
 
 //event listener for previous city buttons to display their weather data
@@ -54,7 +51,7 @@ function getLocation(cityNameInput) {
     var geoCodingCall = `https://api.openweathermap.org/geo/1.0/direct?q=${cityNameInput}&limit=1&appid=${apiKey}`
 
     fetch(geoCodingCall)
-        .then((response) => { return response.json() })
+        .then(response => response.json())
         .then((data) => {
             if (data[0] === undefined) {
                 alert('no cities found')
@@ -79,7 +76,7 @@ function displayData(lat, lon) {
 
     //fetch request for the current weather
     fetch(currentWeatherCall)
-        .then((response) => { return response.json() })
+        .then(response => response.json())
         .then((data) => {
             cwCity.innerHTML = `<strong>${data.name}</strong><img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">`
             cwDate.innerHTML = `<strong>${dateGenerator(data.dt)}</strong>`
@@ -90,7 +87,7 @@ function displayData(lat, lon) {
 
     //fetch request for the 5 day forecast
     fetch(futureWeatherCall)
-        .then((response) => { return response.json() })
+        .then(response => response.json())
         .then((data) => {
             fiveDayForecastContainer.innerHTML = ''
 
@@ -105,12 +102,12 @@ function displayData(lat, lon) {
                 var humidity = data.list[i].main.humidity;
 
                 fiveDayForecastContainer.innerHTML += `
-        <div class="col-lg-2 col-12 border border-3 border-secondary shadow rounded p-2 my-3" id="weatherCards">
-        <p class="h3 text-center">${date}</p>
-        <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class="mx-auto d-block" alt='image of weather'></img>
-        <p>Temp: ${temp}</p>
-        <p>Wind: ${wind} MPH</p>
-        <p>Humidity: ${humidity}%</p>
+        <div class="col-lg-2 col-12 bg-light border border-3 border-secondary shadow rounded p-2 my-3" id="weatherCards">
+            <p class="h3 text-center">${date}</p>
+            <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class="mx-auto d-block" alt='image of weather'></img>
+            <p>Temp: ${temp}</p>
+            <p>Wind: ${wind} MPH</p>
+            <p>Humidity: ${humidity}%</p>
         </div>
         `}
         })
@@ -135,21 +132,17 @@ function cityStorage(cityName) {
 
 //function for generating the buttons
 function buttonGenerator() {
-    cityObjArray.reverse() //I want the buttons to appear with the most recent addition on top
     cityButtonContainer.innerHTML = '' //need to clear the buttons on page load
-    for (var i = 0; i < cityObjArray.length; i++) {
+    for (var i = cityObjArray.length-1; i >= 0; i--) { //I want the buttons to appear with the most recent addition on top, so using reverse loop
         cityButtonContainer.innerHTML += `
         <button type="button" class="btn btn-secondary form-control py-2 my-2">${cityObjArray[i].name}</button>
         `
     }
-    cityObjArray.reverse() //flip it back
 }
 
 //function to turn milliseconds into a readable date. 
 //Part of this code was taken from https://www.geeksforgeeks.org/how-to-convert-milliseconds-to-date-in-javascript/
 function dateGenerator(time) {
     var date = new Date(time * 1000); //code taken from Geeks for Geeks
-    date = date.toString()
-    date = date.slice(4, 15)
-    return date
+    return date.toString().slice(4,15)
 }
