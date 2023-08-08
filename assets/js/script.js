@@ -102,7 +102,7 @@ function displayData(lat, lon) {
                 var humidity = data.list[i].main.humidity;
 
                 fiveDayForecastContainer.innerHTML += `
-        <div class="col-lg-2 col-12 bg-light border border-3 border-secondary shadow rounded p-2 my-3" id="weatherCards">
+        <div class="col-lg-2 col-12 border border-3 border-secondary shadow rounded p-2 my-3" id="weatherCards">
             <p class="h3 text-center">${date}</p>
             <img src='http://openweathermap.org/img/wn/${icon}@2x.png' class="mx-auto d-block" alt='image of weather'></img>
             <p>Temp: ${temp}</p>
